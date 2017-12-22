@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhang.test.demo.dao.AuthorDao">
+
+	<sql id="Base_Column_List" >
+		author_id as authorId,
+		user_id as userId,
+		user_type as userType,
+		author_city as authorCity,
+		author_media_name as authorMediaName,
+		author_apply as authorApply,
+		author_name as authorName,
+		author_tag as authorTag,
+		author_tel as authorTel,
+		author_city as authorCity,
+		author_status as authorStatus,
+		author_introduction as authorIntroduction,
+		author_photo_url as authorPhotoUrl,
+		file_is_complete as fileIsComplete,
+		update_date as updateDate ,
+		author_introduction_update_date as authorIntroductionUpdateDate
+	</sql>
+
+	<!-- 查询所有作者信息 -->
+	<select id="queryAllAuthor" resultType="author">
+		SELECT
+			<include refid="Base_Column_List"></include>
+		FROM
+			media_author
+		WHERE
+			del_flag=1
+	</select>
+</mapper>
