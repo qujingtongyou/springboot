@@ -1,14 +1,14 @@
 package com.zhang.test.demo.controller;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.zhang.common.util.PropertiesUtil;
 import com.zhang.test.demo.service.AuthorService;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,4 +61,14 @@ public class TestController {
     public String testPage(){
         return "testPage";
     }
+
+    @PostMapping("userLogin")
+    public String userLogin(String userName,String userPassword){
+        if(userName.equals("15939477300")){
+            String password = Md5Hash.fromBase64String("15939477300").toString();
+            System.out.print(password);
+        }
+        return "testThmeleaf";
+    }
+
 }
