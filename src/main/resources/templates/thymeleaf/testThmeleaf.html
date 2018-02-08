@@ -1,11 +1,61 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
     <title>Title</title>
+    <!-- 主要样式 -->
+    <link th:href="@{/css/main.css}" rel="stylesheet"/>
+    <!-- bootstrap CSS -->
+    <link th:href="@{/bootstarp/css/bootstrap-responsive.css}" rel="stylesheet" media="screen"/>
+    <link th:href="@{/bootstarp/css/bootstrap.css}" rel="stylesheet"/>
+    <!--<link th:href="@{/bootstarp/css/bootstrap-theme.css}" rel="stylesheet" media="screen"/>-->
+    <!-- jquery -->
+    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+    <!-- 弹框插件 -->
+    <script type="text/javascript" th:src="@{/js/layer/layer.js}"></script>
+    <!-- bootstrap js -->
+    <script type="text/javascript" th:src="@{/bootstarp/js/bootstrap.js}"></script>
+    <!--
+        <script type="text/javascript" th:src="@{/bootstarp/js/npm.js}"></script>
+    -->
 </head>
 <body>
     <input type="text" name="userName" value="James Carrot"/>
-    <image th:src="@{/img/test.jpg}"/>
+    <image class="img-list" th:src="@{/img/test.gif}"/>
+    <image class="img-list" th:src="@{/img/login-bg.jpg}"/>
 </body>
+<script th:inline="javascript">
+$(function () {
+    var txt='{"title": "xxxxx",' //相册标题
+           +'"id": 123, ' //相册id
+           +'"start": 0, ' //初始显示的图片序号，默认0
+           +'"data": [ '   //相册包含的图片，数组格式
+           +'{"alt": "图片名", '
+           +'"pid": 666, ' //图片id
+           +'"src": "http://localhost:8080/springboot/img/test.gif", ' //原图地址
+           +'"thumb": "http://localhost:8080/springboot/img/test.gif"}'//缩略图地址
+           +',{"alt": "图片名", '
+           +'"pid": 666, ' //图片id
+           +'"src": "http://localhost:8080/springboot/img/test.gif", ' //原图地址
+           +'"thumb": "http://localhost:8080/springboot/img/test.gif"}'//缩略图地址
+           +'] }';
+    /* <![CDATA[ */
+    var i;
+    for ( i=0;i < 2;i++) {
+
+    }
+    /* ]]> */
+    console.log($('.img-list'));
+    console.log(JSON.parse(txt));
+    layer.photos({
+        photos: JSON.parse(txt),
+        anim: 5
+    });
+
+})
+
+</script>
 </html>
