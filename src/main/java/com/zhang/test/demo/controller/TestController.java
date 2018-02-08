@@ -2,6 +2,7 @@ package com.zhang.test.demo.controller;
 
 import ch.qos.logback.core.net.SyslogOutputStream;
 import com.zhang.common.util.PropertiesUtil;
+import com.zhang.test.demo.entity.Author;
 import com.zhang.test.demo.service.AuthorService;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,15 +33,6 @@ public class TestController {
         return model;
     }
 
-    @GetMapping("loginUser")
-    @ResponseBody
-    public String loginUser(){
-        try {
-            return "123456789";
-        }catch (Exception e){
-            return "123456789";
-        }
-    }
     @GetMapping("queryAuthor")
     @ResponseBody
     public Map<String,Object> queryAuthor(){
@@ -63,12 +56,21 @@ public class TestController {
     }
 
     @PostMapping("userLogin")
-    public String userLogin(String userName,String userPassword){
+    public String userLogin(String userName, String userPassword, Model model, HttpSession session, Author author){
         if(userName.equals("15939477300")){
-            String password = Md5Hash.fromBase64String("15939477300").toString();
-            System.out.print(password);
+            String password = Md5Hash.fromBase64String(userPassword).toString();
+            if(password.equals("d76df80000")){
+                session.setAttribute("userToken",userName);
+                return "testThmeleaf";
+            }
+            session.setAttribute("errorMassage","密码错误!");
+            return "redirect:testPage";
         }
-        return "testThmeleaf";
+        session.setAttribute("errorMassage","账号不存在！");
+        return "redirect:testPage";
     }
-
+    @GetMapping("removeErrorMassage")
+    public void removeErrorMassage(HttpSession session){
+        session.removeAttribute("errorMassage");
+    }
 }
