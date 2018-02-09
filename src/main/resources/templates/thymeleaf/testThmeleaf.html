@@ -8,54 +8,99 @@
     <title>Title</title>
     <!-- 主要样式 -->
     <link th:href="@{/css/main.css}" rel="stylesheet"/>
-    <!-- bootstrap CSS -->
+  <!--  &lt;!&ndash; bootstrap CSS &ndash;&gt;
     <link th:href="@{/bootstarp/css/bootstrap-responsive.css}" rel="stylesheet" media="screen"/>
-    <link th:href="@{/bootstarp/css/bootstrap.css}" rel="stylesheet"/>
+    <link th:href="@{/bootstarp/css/bootstrap.css}" rel="stylesheet"/>-->
     <!--<link th:href="@{/bootstarp/css/bootstrap-theme.css}" rel="stylesheet" media="screen"/>-->
     <!-- jquery -->
     <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
-    <!-- 弹框插件 -->
-    <script type="text/javascript" th:src="@{/js/layer/layer.js}"></script>
+    <!-- layui 前端框架 -->
+    <link th:href="@{/layui/css/layui.css}" rel="stylesheet"/>
+    <script type="text/javascript" th:src="@{/layui/layui.all.js}"></script>
     <!-- bootstrap js -->
-    <script type="text/javascript" th:src="@{/bootstarp/js/bootstrap.js}"></script>
+    <!--<script type="text/javascript" th:src="@{/bootstarp/js/bootstrap.js}"></script>-->
     <!--
         <script type="text/javascript" th:src="@{/bootstarp/js/npm.js}"></script>
     -->
+    <style type="text/css">
+        .img-list{
+            max-width: 200px;
+        }
+        button{
+            display: inline-block;
+            vertical-align: middle;
+            height: 40px;
+            width: 120px;
+            line-height: 40px;
+            font-size: 17px;
+            font-weight: 300;
+            text-align: center;
+            white-space: nowrap;
+            cursor: pointer;
+            border: 1px solid #d9dee0;
+            border-radius: 4px;
+            color: #fff;
+            background: #26b2f7;
+        }
+        .layui-layer-phimg img{
+            max-width: 500px;
+        }
+        .layui-layer-photos{
+        }
+    </style>
 </head>
 <body>
     <input type="text" name="userName" value="James Carrot"/>
-    <image class="img-list" th:src="@{/img/test.gif}"/>
-    <image class="img-list" th:src="@{/img/login-bg.jpg}"/>
+    <div class="photos-list">
+        <image class="img-list" th:src="@{/img/test.gif}"/>
+        <image class="img-list" th:src="@{/img/login-bg.jpg}"/>
+        <img class="img-list" lay-src="/springboot/img/login-bg.jpg"/>
+    </div>
+    <button class="layui-btn layui-btn-normal btn btn-large btn-primary" onclick="openPhotosAlbum()">打开相册</button>
+    <div id="demo11"></div>
 </body>
 <script th:inline="javascript">
-$(function () {
-    var txt='{"title": "xxxxx",' //相册标题
-           +'"id": 123, ' //相册id
-           +'"start": 0, ' //初始显示的图片序号，默认0
-           +'"data": [ '   //相册包含的图片，数组格式
-           +'{"alt": "图片名", '
-           +'"pid": 666, ' //图片id
-           +'"src": "http://localhost:8080/springboot/img/test.gif", ' //原图地址
-           +'"thumb": "http://localhost:8080/springboot/img/test.gif"}'//缩略图地址
-           +',{"alt": "图片名", '
-           +'"pid": 666, ' //图片id
-           +'"src": "http://localhost:8080/springboot/img/test.gif", ' //原图地址
-           +'"thumb": "http://localhost:8080/springboot/img/test.gif"}'//缩略图地址
-           +'] }';
-    /* <![CDATA[ */
-    var i;
-    for ( i=0;i < 2;i++) {
+    $(function () {
+        layui.use('laypage', function(){
+            var laypage = layui.laypage;
+            //执行一个laypage实例
+            laypage.render({
+                elem: 'demo11' //注意，这里的 test1 是 ID，不用加 # 号
+                ,count: 100 //数据总数，从服务端得到
+                ,theme: '#26b2f7'
+                ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+            });
+        });
+    })
 
+    function openPhotosAlbum() {
+        var txt='{"title": "xxxxx",' //相册标题
+            +'"id": 123, ' //相册id
+            +'"start": 0, ' //初始显示的图片序号，默认0
+            +'"data": [ '   //相册包含的图片，数组格式
+        /* <![CDATA[ */
+        for (var i = 0; i < $('.img-list').length; i++) {
+            txt+='{"alt": "图片名", '
+                +'"pid": 666, ' //图片id
+                +'"src": "'+$($('.img-list')[i]).attr('src')+'", ' //原图地址
+                +'"thumb": "'+$($('.img-list')[i]).attr('src')+'"} '; //缩略图地址
+            if(i!=$('.img-list').length-1){
+                txt+=',';
+            }else{
+                txt+='] }';
+            }
+        }
+        console.log(txt);
+        /* ]]> */
+        layer.photos({
+            photos: JSON.parse(txt),
+            anim: 5
+        });
+        layui.use('flow', function(){
+            var flow = layui.flow;
+            //当你执行这样一个方法时，即对页面中的全部带有lay-src的img元素开启了懒加载（当然你也可以指定相关img）
+            flow.lazyimg();
+        });
     }
-    /* ]]> */
-    console.log($('.img-list'));
-    console.log(JSON.parse(txt));
-    layer.photos({
-        photos: JSON.parse(txt),
-        anim: 5
-    });
-
-})
-
 </script>
 </html>
