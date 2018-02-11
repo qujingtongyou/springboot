@@ -15,8 +15,8 @@
     <!-- jquery -->
     <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
     <!-- layui 前端框架 -->
-    <link th:href="@{/layui/css/layui.css}" rel="stylesheet"/>
-    <script type="text/javascript" th:src="@{/layui/layui.all.js}"></script>
+    <link th:href="@{/layui/css/layui.css}" rel="stylesheet" media="all"/>
+    <script type="text/javascript" th:src="@{/layui/layui.js}" charset="utf-8"></script>
     <!-- bootstrap js -->
     <!--<script type="text/javascript" th:src="@{/bootstarp/js/bootstrap.js}"></script>-->
     <!--
@@ -42,22 +42,63 @@
             color: #fff;
             background: #26b2f7;
         }
-        .layui-layer-phimg img{
+      /*  .layui-layer-phimg img{
             max-width: 500px;
-        }
+        }*/
         .layui-layer-photos{
         }
     </style>
 </head>
 <body>
-    <input type="text" name="userName" value="James Carrot"/>
+    <!-- 导航 -->
+    <ul class="layui-nav" lay-filter="">
+        <li class="layui-nav-item"><a href="">最新活动</a></li>
+        <li class="layui-nav-item layui-this"><a href="">产品</a></li>
+        <li class="layui-nav-item"><a href="">大数据</a></li>
+        <li class="layui-nav-item">
+            <a href="javascript:;">解决方案</a>
+            <dl class="layui-nav-child"> <!-- 二级菜单 -->
+                <dd><a href="">移动模块</a></dd>
+                <dd><a href="">后台模版</a></dd>
+                <dd><a href="">电商平台</a></dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item"><a href="">社区</a></li>
+    </ul>
+
     <div class="photos-list">
         <image class="img-list" th:src="@{/img/test.gif}"/>
         <image class="img-list" th:src="@{/img/login-bg.jpg}"/>
-        <img class="img-list" lay-src="/springboot/img/login-bg.jpg"/>
+        <!--<img class="img-list" lay-src="/springboot/img/login-bg.jpg"/>-->
     </div>
+
     <button class="layui-btn layui-btn-normal btn btn-large btn-primary" onclick="openPhotosAlbum()">打开相册</button>
+    <!-- 分页 -->
     <div id="demo11"></div>
+    <!-- 轮播图 -->
+    <div class="layui-carousel" id="test2" style="margin-top: 15px;">
+        <div carousel-item="">
+            <div><a th:href="@{/img/test.gif}" target="_blank"><image th:src="@{/img/test.gif}" style="width: 1000px;height: 400px;"/></a></div>
+            <div><a th:href="@{/img/login-bg.jpg}" target="_blank"><image th:src="@{/img/login-bg.jpg}" style="width: 1000px;height: 400px;"/></a></div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">标签区域</label>
+        <div class="layui-input-block">
+            <select name="quiz">
+                <option value="">请选择</option>
+                <optgroup label="城市记忆">
+                    <option value="你工作的第一个城市">你工作的第一个城市？</option>
+                </optgroup>
+                <optgroup label="学生时代">
+                    <option value="你的工号">你的工号？</option>
+                    <option value="你最喜欢的老师">你最喜欢的老师？</option>
+                </optgroup>
+            </select>
+        </div>
+    </div>
+
 </body>
 <script th:inline="javascript">
     $(function () {
@@ -69,6 +110,42 @@
                 ,count: 100 //数据总数，从服务端得到
                 ,theme: '#26b2f7'
                 ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                ,jump: function(obj, first){
+                    //obj包含了当前分页的所有参数，比如：
+                    console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+                    console.log(obj.limit); //得到每页显示的条数
+
+                    //首次不执行
+                    if(!first){
+                        //do something
+                    }
+                }
+            });
+        });
+
+        layui.use(['carousel', 'form'], function() {
+            var carousel = layui.carousel
+                , form = layui.form;
+            //改变下时间间隔、动画类型、高度
+            carousel.render({
+                elem: '#test2'
+                ,interval: 1800
+                ,anim: 'fade'
+                ,height: '400px'
+                ,width: '1000px'
+            });
+            //监听提交
+            form.on('submit(formDemo)', function(data){
+                layer.msg(JSON.stringify(data.field));
+                return false;
+            });
+        })
+        layui.use('element', function(){
+            var element = layui.element;
+            //监听导航点击
+            element.on('nav(demo)', function(elem){
+                //console.log(elem)
+                layer.msg(elem.text());
             });
         });
     })
@@ -96,11 +173,11 @@
             photos: JSON.parse(txt),
             anim: 5
         });
-        layui.use('flow', function(){
+       /* layui.use('flow', function(){
             var flow = layui.flow;
             //当你执行这样一个方法时，即对页面中的全部带有lay-src的img元素开启了懒加载（当然你也可以指定相关img）
             flow.lazyimg();
-        });
+        });*/
     }
 </script>
 </html>

@@ -73,4 +73,9 @@ public class TestController {
     public void removeErrorMassage(HttpSession session){
         session.removeAttribute("errorMassage");
     }
+
+    @GetMapping("toTestNavigation")
+    public String toTestNavigation(){
+        return "testNavigation";
+    }
 }
