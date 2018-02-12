@@ -19,6 +19,7 @@
 </head>
 <body>
     <form class="layui-form">
+        <i class="layui-icon">&#x1002;</i>
         <div class="layui-form-item">
             <label class="layui-form-label">选择框</label>
             <div class="layui-input-block" style="width: 200px;">
@@ -31,8 +32,8 @@
                     <option value="4">杭州</option>
                 </select>
             </div>
-            <div class="layui-input-block">
-                <select name="quiz">
+            <div class="layui-input-block" style="width: 200px;">
+                <select name="quiz" lay-filter="quiz">
                     <option value="">请选择</option>
                     <optgroup label="城市记忆">
                         <option value="你工作的第一个城市">你工作的第一个城市？</option>
@@ -68,7 +69,8 @@
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
-                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                <button type="reset" id="reset" class="layui-btn layui-btn-primary">重置</button>
+                <button type="button" id="btn" onclick="tips()">按钮</button>
             </div>
         </div>
     </form>
@@ -84,7 +86,21 @@
             layer.msg(JSON.stringify(data.field));
             return false;
         });
+        form.on('select(quiz)', function(data){
+            console.log(data.elem); //得到select原始DOM对象
+            console.log(data.value); //得到被选中的值
+            console.log(data.othis); //得到美化后的DOM对象
+        });
     });
+    function tips (){
+        layui.use('layer', function(){
+            //小tips
+            layer.tips('我是另外一个tips，只不过我长得跟之前那位稍有些不一样。', '#btn', {
+                tips: [1, '#3595CC'],
+                time: 4000
+            });
+        })
+    }
 </script>
 
 </body>

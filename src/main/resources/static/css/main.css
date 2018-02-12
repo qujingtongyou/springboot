@@ -12,3 +12,19 @@ input{background-color:#fff;cursor:text;-webkit-appearance:textfield;-webkit-rtl
 .login .ctrl-pwd{position:relative;height:44px;color:#666;font-size:14px;line-height:44px}
 .login .form-signin{margin-top:25%}
 .login .btn-primary{margin-left: 110px;}
+button{
+    display: inline-block;
+    vertical-align: middle;
+    height: 40px;
+    width: 120px;
+    line-height: 40px;
+    font-size: 17px;
+    font-weight: 300;
+    text-align: center;
+    white-space: nowrap;
+    cursor: pointer;
+    border: 1px solid #d9dee0;
+    border-radius: 4px;
+    color: #fff;
+    background: #26b2f7;
+}
