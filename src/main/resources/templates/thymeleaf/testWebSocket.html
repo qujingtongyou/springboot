@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>Title</title>
+    <!-- 主要样式 -->
+    <link th:href="@{/css/main.css}" rel="stylesheet"/>
+    <!-- bootstrap CSS -->
+    <link th:href="@{/bootstarp/css/bootstrap-responsive.css}" rel="stylesheet" media="screen"/>
+    <link th:href="@{/bootstarp/css/bootstrap.css}" rel="stylesheet"/>
+    <!--<link th:href="@{/bootstarp/css/bootstrap-theme.css}" rel="stylesheet" media="screen"/>-->
+    <!-- jquery -->
+    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+    <!-- bootstrap js -->
+    <script type="text/javascript" th:src="@{/bootstarp/js/bootstrap.js}"></script>
+<body>
+    <input type="text" class="massage-input"/><button onclick="sendMassage()">发送</button>
+    <textarea class="massage-textarea" style="height: 200px;width: 200px;"></textarea>
+</body>
+<script th:inline="javascript">
+    initSocket("user");
+    initSocket("news");
+    initSocket("client");
+
+    var webSocket = null;
+    function initSocket(myWebsocket) {
+        window.onbeforeunload = function () {
+            //离开页面时的其他操作
+        };
+
+        if (!window.WebSocket) {
+            console.log("您的浏览器不支持websocket！");
+            return false;
+        }
+
+        var target = 'ws://' + window.location.host + "/springboot/websocket/"+2;
+
+        if ('WebSocket' in window) {
+            webSocket = new WebSocket(target);
+        } else if ('MozWebSocket' in window) {
+            webSocket = new MozWebSocket(target);
+        } else {
+            alert('WebSocket is not supported by this browser.');
+            return;
+        }
+
+        // 收到服务端消息
+        webSocket.onmessage = function (msg) {
+            $('.massage-textarea').val($('.massage-textarea').val()+msg.data);
+            // 关闭连接
+            webSocket.onclose();
+            console.log(msg);
+        };
+
+        // 异常
+        webSocket.onerror = function (event) {
+            console.log(event);
+        };
+
+        // 建立连接
+        webSocket.onopen = function (event) {
+            console.log(event);
+        };
+
+        // 断线
+        webSocket.onclose = function () {
+
+            console.log("websocket断开连接");
+        };
+    }
+    $(function(){
+        initSocket('lalalal');
+    })
+    function sendMassage(){
+        var massage = $('.massage-input').val();
+        $('.massage-textarea').val($('.massage-textarea').val()+massage);
+        webSocket.send(1+'-'+massage);
+    }
+</script>
+</html>

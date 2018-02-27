@@ -1,6 +1,5 @@
 package com.zhang.test.demo.controller;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import com.zhang.common.util.PropertiesUtil;
 import com.zhang.test.demo.entity.Author;
 import com.zhang.test.demo.service.AuthorService;
@@ -77,5 +76,10 @@ public class TestController {
     @GetMapping("toTestNavigation")
     public String toTestNavigation(){
         return "testNavigation";
+    }
+
+    @GetMapping("toTestWebSocket")
+    public String toTestWebSocket(){
+        return "testWebSocket";
     }
 }

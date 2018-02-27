@@ -36,15 +36,15 @@
 <body>
     <!-- 导航 -->
     <ul class="layui-nav" lay-filter="">
-        <li class="layui-nav-item"><a href="">最新活动</a></li>
-        <li class="layui-nav-item layui-this"><a href="">产品</a></li>
-        <li class="layui-nav-item"><a href="">大数据</a></li>
+        <li class="layui-nav-item"><a href="#">最新活动</a></li>
+        <li class="layui-nav-item layui-this"><a href="#">产品</a></li>
+        <li class="layui-nav-item"><a href="#">大数据</a></li>
         <li class="layui-nav-item">
             <a href="javascript:;">解决方案</a>
             <dl class="layui-nav-child"> <!-- 二级菜单 -->
-                <dd><a href="">移动模块</a></dd>
-                <dd><a href="">后台模版</a></dd>
-                <dd><a href="">电商平台</a></dd>
+                <dd><a href="#">移动模块</a></dd>
+                <dd><a href="#">后台模版</a></dd>
+                <dd><a href="#">电商平台</a></dd>
             </dl>
         </li>
         <li class="layui-nav-item"><a href="">社区</a></li>
@@ -66,26 +66,10 @@
             <div><a th:href="@{/img/login-bg.jpg}" target="_blank"><image th:src="@{/img/login-bg.jpg}" style="width: 1000px;height: 400px;"/></a></div>
         </div>
     </div>
-
-    <div class="layui-form-item">
-        <label class="layui-form-label">标签区域</label>
-        <div class="layui-input-block">
-            <select name="quiz">
-                <option value="">请选择</option>
-                <optgroup label="城市记忆">
-                    <option value="你工作的第一个城市">你工作的第一个城市？</option>
-                </optgroup>
-                <optgroup label="学生时代">
-                    <option value="你的工号">你的工号？</option>
-                    <option value="你最喜欢的老师">你最喜欢的老师？</option>
-                </optgroup>
-            </select>
-        </div>
-    </div>
-
 </body>
 <script th:inline="javascript">
-    $(function () {
+    $(function (){
+        alert( $('.photos-list').offset().top);
         layui.use('laypage', function(){
             var laypage = layui.laypage;
             //执行一个laypage实例
@@ -98,7 +82,7 @@
                     //obj包含了当前分页的所有参数，比如：
                     console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
                     console.log(obj.limit); //得到每页显示的条数
-
+                    console.log(obj);
                     //首次不执行
                     if(!first){
                         //do something
@@ -141,8 +125,8 @@
             +'"data": [ '   //相册包含的图片，数组格式
         /* <![CDATA[ */
         for (var i = 0; i < $('.img-list').length; i++) {
-            txt+='{"alt": "图片名", '
-                +'"pid": 666, ' //图片id
+            txt+='{"alt": "图片名'+i+'", '
+                +'"pid": '+i+', ' //图片id
                 +'"src": "'+$($('.img-list')[i]).attr('src')+'", ' //原图地址
                 +'"thumb": "'+$($('.img-list')[i]).attr('src')+'"} '; //缩略图地址
             if(i!=$('.img-list').length-1){

@@ -52,7 +52,12 @@
 			<version>3.1.0</version>
 			<scope>provided</scope>
 		</dependency>
-
+		<!-- WebSocket -->
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+			<version>8.0</version>
+		</dependency>
 		<!-- 数据库连接池druid配置 -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
@@ -102,6 +107,11 @@
 			<groupId>net.sourceforge.nekohtml</groupId>
 			<artifactId>nekohtml</artifactId>
 			<version>1.9.21</version>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.35</version>
 		</dependency>
 	</dependencies>
 
