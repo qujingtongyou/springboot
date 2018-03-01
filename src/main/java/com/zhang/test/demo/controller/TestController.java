@@ -68,6 +68,7 @@ public class TestController {
         session.setAttribute("errorMassage","账号不存在！");
         return "redirect:testPage";
     }
+
     @GetMapping("removeErrorMassage")
     public void removeErrorMassage(HttpSession session){
         session.removeAttribute("errorMassage");
@@ -82,4 +83,11 @@ public class TestController {
     public String toTestWebSocket(){
         return "testWebSocket";
     }
+
+    @GetMapping
+    public String toTestNetty(){
+        return "testNetty";
+    }
+
+
 }

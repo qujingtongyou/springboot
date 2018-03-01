@@ -8,6 +8,8 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -23,7 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class TestWebSocket {
 
     private static final Logger logger = LoggerFactory.getLogger(TestWebSocket.class);
-    public static Map<String, TestWebSocket> clients = new ConcurrentHashMap<>();
+    public static Map<String, TestWebSocket> clients = Collections.synchronizedMap(new HashMap<String, TestWebSocket>());
     private String userId;
     private String nickname;
     private Session session;
@@ -43,10 +45,10 @@ public class TestWebSocket {
         this.userId = uid;
         this.session = session;
         System.out.println("进入："+myWebsocket);
-         /*判断链接是否已经在链接队列中，存在就不加*/
+        /*判断链接是否已经在链接队列中，存在就不加*/
         if(!clients.containsKey(uid)){
             clients.put(uid, this);
-            String message = "* 你已经链接";
+            String message = "你已经链接";
             toConfirmFriend(message,userId);
         }
     }
@@ -57,14 +59,14 @@ public class TestWebSocket {
      * @return
      */
     @OnMessage
-    public String onMessage(String message) {
+    public void onMessage(String message) {
         String[] all = message.split("-");
         //要接收消息好友的ID
         String uid = all[0];
         System.out.print(message);
         System.out.print(uid);
         toConfirmFriend(message,uid);
-        return "Got your message ("+ message +").Thanks !";
+        toBroadcast();
     }
 
     /**
@@ -103,6 +105,7 @@ public class TestWebSocket {
 
     //发送给指定的好友
     private static void toConfirmFriend(String msg,String uid) {
+        System.out.print(uid);
         TestWebSocket client = clients.get(uid);
         try {
             synchronized (client) {
@@ -115,5 +118,23 @@ public class TestWebSocket {
                 // Ignore
             }
         }
+    }
+
+    private static void toBroadcast(){
+        clients.entrySet().stream().forEach((entry) -> {
+            try {
+                synchronized (entry) {
+                    entry.getValue().session.getBasicRemote().sendText("群发消息");
+                }
+            } catch (IOException e) {
+                clients.remove(entry.getKey());
+                e.printStackTrace();
+                try {
+                    entry.getValue().session.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
     }
 }
